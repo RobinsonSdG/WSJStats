@@ -6,7 +6,7 @@ import csv
 
 
 def get_rankings(year):
-    url = f"http://localhost:8000/rankings/{year}"
+    url = f"https://wsj.fly.dev/rankings/{year}"
     response = requests.get(url)
 
     if response.status_code == 200:
@@ -16,19 +16,19 @@ def get_rankings(year):
         print(f"La requête pour l'année {year} a échoué avec le code de statut {response.status_code}")
         return []
 
-# Récupérer les classements pour 2023 et 2024
-rankings_2023 = get_rankings(2023)
-# rankings_2024 = get_rankings(2024)
+# Récupérer les classements pour 2023 et 2020
+# rankings_2023 = get_rankings(2023)
+rankings_2020 = get_rankings(2020)
 
 # Fusionner les classements dans une seule liste triée par semaine
-# all_rankings = rankings_2023 + rankings_2024
-all_rankings = rankings_2023
-# all_rankings = rankings_2024
+# all_rankings = rankings_2023 + rankings_2020
+# all_rankings = rankings_2023
+all_rankings = rankings_2020
 # print(all_rankings)
 # all_rankings.sort(key=lambda x: (int(x["year"]), int(x["week"])))
 
 
-# url = "http://localhost:8000/rankings/2024"
+# url = "http://localhost:8000/rankings/2020"
 
 # # Envoi de la requête GET
 # response = requests.get(url)
@@ -52,6 +52,8 @@ for semaine in all_rankings:
     # Parcourir chaque classement de la semaine
     for index, classement in enumerate(semaine["ranking"], start=1):  # commence à 1 pour refléter la position dans le tableau
         nom_manga = classement["name"]
+        if nom_manga == "RuriDragon":
+            continue
         classement_manga = index  # utilisez l'index comme classement
         taille_classement = len(semaine["ranking"])
 
@@ -86,6 +88,26 @@ ecarts_types = {manga: np.std([c[1] for c in classements[manga]]) for manga in c
 etendues = {manga: np.ptp([c[1] for c in classements[manga]]) for manga in classements}
 iqrs = {manga: np.percentile([c[1] for c in classements[manga]], 75) - np.percentile([c[1] for c in classements[manga]], 25) for manga in classements}
 
+# Initialisation du compteur de pages couleurs pour chaque manga
+pages_couleurs = {manga: 0 for manga in classement_total}
+covers = {manga: 0 for manga in classement_total}
+
+# Parcours du JSON pour chaque semaine
+for semaine in all_rankings:
+    color_pages = semaine["color_pages"]
+    manga = semaine["cover"]["rank"]["name"]
+    if manga in covers:
+        covers[manga] += 1
+    else:
+        covers[manga] = 1
+    for color_page in color_pages:
+        manga = color_page["rank"]["name"]
+        if manga in pages_couleurs:
+            pages_couleurs[manga] += 1
+        else:
+            pages_couleurs[manga] = 1
+
+
 # Ordonner les mangas par la moyenne de la plus haute à la plus basse
 mangas_ord = sorted(moyennes.keys(), key=lambda x: moyennes[x], reverse=True)
 
@@ -113,8 +135,8 @@ for bar1, bar2 in zip(bars1, bars2):
 plt.show()
 
 # Enregistrez les statistiques dans un fichier CSV
-with open('statistiques_mangas.csv', 'w', newline='') as csvfile:
-    fieldnames = ['Manga', 'Moyenne', 'Écart type', 'Étendue', 'IQR', 'Occurrences', 'Premières places', 'Top 3', 'Bottom 3', 'Derniers classements']
+with open('2020.csv', 'w', newline='') as csvfile:
+    fieldnames = ['Manga', 'Moyenne', 'Écart type', 'Étendue', 'IQR', 'Occurrences', 'Premières places', 'Top 3', 'Bottom 3', 'Pages couleurs', 'Covers', 'Derniers classements']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
     writer.writeheader()
@@ -122,7 +144,7 @@ with open('statistiques_mangas.csv', 'w', newline='') as csvfile:
         writer.writerow({'Manga': manga, 'Moyenne': moyennes[manga], 'Écart type': ecarts_types[manga],
                             'Étendue': etendues[manga], 'IQR': iqrs[manga], 'Occurrences': nombre_occurrences[manga],
                             'Premières places': premieres_places.get(manga, 0), 'Top 3': top3.get(manga, 0),
-                            'Bottom 3': bottom3.get(manga, 0), 'Derniers classements': derniers_classements[manga]})
+                            'Bottom 3': bottom3.get(manga, 0), 'Pages couleurs': pages_couleurs[manga], 'Covers': covers[manga], 'Derniers classements': derniers_classements[manga]})
         
 # Enregistrer un graphique pour chaque manga
 for manga in mangas_ord:

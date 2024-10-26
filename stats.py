@@ -16,19 +16,19 @@ def get_rankings(year):
         print(f"La requête pour l'année {year} a échoué avec le code de statut {response.status_code}")
         return []
 
-# Récupérer les classements pour 2023 et 2020
+# Récupérer les classements pour 2023 et 2024
 # rankings_2023 = get_rankings(2023)
-rankings_2020 = get_rankings(2020)
+rankings_2024 = get_rankings(2024)
 
 # Fusionner les classements dans une seule liste triée par semaine
-# all_rankings = rankings_2023 + rankings_2020
+# all_rankings = rankings_2023 + rankings_2024
 # all_rankings = rankings_2023
-all_rankings = rankings_2020
+all_rankings = rankings_2024
 # print(all_rankings)
 # all_rankings.sort(key=lambda x: (int(x["year"]), int(x["week"])))
 
 
-# url = "http://localhost:8000/rankings/2020"
+# url = "http://localhost:8000/rankings/2024"
 
 # # Envoi de la requête GET
 # response = requests.get(url)
@@ -50,12 +50,18 @@ derniers_classements = {}
 # Parcourir chaque semaine de classement
 for semaine in all_rankings:
     # Parcourir chaque classement de la semaine
+    taille_classement = len(semaine["ranking"])
+    for index, classement in enumerate(semaine["ranking"], start=1):
+        nom_manga = classement["name"]
+        if nom_manga == "Yokai Buster Murakami":
+            taille_classement -= 1
     for index, classement in enumerate(semaine["ranking"], start=1):  # commence à 1 pour refléter la position dans le tableau
         nom_manga = classement["name"]
         if nom_manga == "RuriDragon":
             continue
+        if nom_manga == "Yokai Buster Murakami":
+            continue
         classement_manga = index  # utilisez l'index comme classement
-        taille_classement = len(semaine["ranking"])
 
         # Mettre à jour le classement total, le nombre d'occurrences, et la liste des classements pour chaque manga
         if nom_manga in classement_total:
@@ -73,7 +79,7 @@ for semaine in all_rankings:
             premieres_places[nom_manga] = premieres_places.get(nom_manga, 0) + 1
         if classement_manga <= 3:
             top3[nom_manga] = top3.get(nom_manga, 0) + 1
-        if classement_manga > len(semaine["ranking"]) - 3:
+        if classement_manga > taille_classement - 3:
             bottom3[nom_manga] = bottom3.get(nom_manga, 0) + 1
 
         # Mettre à jour les 5 derniers classements de chaque manga avec la semaine
@@ -135,7 +141,7 @@ for bar1, bar2 in zip(bars1, bars2):
 plt.show()
 
 # Enregistrez les statistiques dans un fichier CSV
-with open('2020.csv', 'w', newline='') as csvfile:
+with open('2024.csv', 'w', newline='') as csvfile:
     fieldnames = ['Manga', 'Moyenne', 'Écart type', 'Étendue', 'IQR', 'Occurrences', 'Premières places', 'Top 3', 'Bottom 3', 'Pages couleurs', 'Covers', 'Derniers classements']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 

@@ -1,0 +1,138 @@
+{
+    "week": "24",
+    "ranking": [
+        {
+            "name": "One Piece",
+            "chapter": 9
+        },
+        {
+            "name": "Blue Box",
+            "chapter": 16
+        },
+        {
+            "name": "Sakamoto Days",
+            "chapter": 17
+        },
+        {
+            "name": "Jujutsu Kaisen",
+            "chapter": 13
+        },
+        {
+            "name": "My Hero Academia",
+            "chapter": 13
+        },
+        {
+            "name": "Akane-banashi",
+            "chapter": 14
+        },
+        {
+            "name": "Witch Watch",
+            "chapter": 18
+        },
+        {
+            "name": "Mission: Yozakura Family",
+            "chapter": 15
+        },
+        {
+            "name": "Kill Blue",
+            "chapter": 16
+        },
+        {
+            "name": "Undead Unluck",
+            "chapter": 15
+        },
+        {
+            "name": "Me and Roboco",
+            "chapter": 17
+        },
+        {
+            "name": "The Elusive Samurai",
+            "chapter": 19
+        },
+        {
+            "name": "Nue's Exorcist",
+            "chapter": 15
+        },
+        {
+            "name": "Kagurabachi",
+            "chapter": 16
+        },
+        {
+            "name": "Green Green Greens",
+            "chapter": 13
+        },
+        {
+            "name": "MamaYuyu",
+            "chapter": 15
+        },
+        {
+            "name": "Martial Master Asumi",
+            "chapter": 9
+        },
+        {
+            "name": "Cipher Academy",
+            "chapter": 8
+        },
+        {
+            "name": "Shadow Eliminators",
+            "chapter": 12
+        },
+        {
+            "name": "Two on Ice",
+            "chapter": 17
+        }
+    ],
+    "newbies": [],
+    "absent": [
+        {
+            "name": "Dear Anemone",
+            "chapter": 4
+        },
+        {
+            "name": "Super Psychic Policeman Chojo",
+            "chapter": 4
+        }
+    ],
+    "cover": {
+        "imgs": [
+            "https://static.wikia.nocookie.net/weeky-shonen-jump/images/d/d9/WSJ_Issue_2024_20_Cover.png"
+        ],
+        "rank": {
+            "name": "Astro Royale",
+            "chapter": 1
+        }
+    },
+    "color_pages": [
+        {
+            "imgs": [
+                "https://static.wikia.nocookie.net/weeky-shonen-jump/images/1/17/Astro_Royale_ch001p1_Issue_20_2024.png",
+                "https://static.wikia.nocookie.net/weeky-shonen-jump/images/d/dd/Astro_Royale_ch001_Issue_20_2024.png"
+            ],
+            "rank": {
+                "name": "Astro Royale",
+                "chapter": 1
+            }
+        },
+        {
+            "imgs": [
+                "https://static.wikia.nocookie.net/weeky-shonen-jump/images/d/d3/Undead_Unluck_ch203_Issue_20_2024.png"
+            ],
+            "rank": {
+                "name": "Undead Unluck",
+                "chapter": 203
+            }
+        },
+        {
+            "imgs": [
+                "https://static.wikia.nocookie.net/weeky-shonen-jump/images/b/bb/Nue%27s_Exorcist_ch046_Issue_20_2024.png"
+            ],
+            "rank": {
+                "name": "Nue's Exorcist",
+                "chapter": 46
+            }
+        }
+    ],
+    "preview_pages": [
+        "https://static.wikia.nocookie.net/weeky-shonen-jump/images/3/3b/WSJ_Issue_2024_21_Preview.png"
+    ]
+}

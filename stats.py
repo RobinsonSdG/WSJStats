@@ -16,19 +16,19 @@ def get_rankings(year):
         print(f"La requête pour l'année {year} a échoué avec le code de statut {response.status_code}")
         return []
 
-# Récupérer les classements pour 2023 et 2020
-# rankings_2023 = get_rankings(2023)
-rankings_2020 = get_rankings(2020)
+# Récupérer les classements pour 2024 et 2024
+# rankings_2024 = get_rankings(2024)
+rankings_2024 = get_rankings(2024)
 
 # Fusionner les classements dans une seule liste triée par semaine
-# all_rankings = rankings_2023 + rankings_2020
-# all_rankings = rankings_2023
-all_rankings = rankings_2020
+# all_rankings = rankings_2024 + rankings_2024
+# all_rankings = rankings_2024
+all_rankings = rankings_2024
 # print(all_rankings)
 # all_rankings.sort(key=lambda x: (int(x["year"]), int(x["week"])))
 
 
-# url = "http://localhost:8000/rankings/2020"
+# url = "http://localhost:8000/rankings/2024"
 
 # # Envoi de la requête GET
 # response = requests.get(url)
@@ -91,15 +91,23 @@ iqrs = {manga: np.percentile([c[1] for c in classements[manga]], 75) - np.percen
 # Initialisation du compteur de pages couleurs pour chaque manga
 pages_couleurs = {manga: 0 for manga in classement_total}
 covers = {manga: 0 for manga in classement_total}
+absences = {manga: 0 for manga in classement_total}
 
 # Parcours du JSON pour chaque semaine
 for semaine in all_rankings:
     color_pages = semaine["color_pages"]
     manga = semaine["cover"]["rank"]["name"]
+    absents = semaine["absent"]
     if manga in covers:
         covers[manga] += 1
     else:
         covers[manga] = 1
+    for absent in absents:
+        manga = absent["name"]
+        if manga in absences:
+            absences[manga] += 1
+        else:
+            absences[manga] = 1
     for color_page in color_pages:
         manga = color_page["rank"]["name"]
         if manga in pages_couleurs:
@@ -135,14 +143,14 @@ for bar1, bar2 in zip(bars1, bars2):
 plt.show()
 
 # Enregistrez les statistiques dans un fichier CSV
-with open('2020.csv', 'w', newline='') as csvfile:
-    fieldnames = ['Manga', 'Moyenne', 'Écart type', 'Étendue', 'IQR', 'Occurrences', 'Premières places', 'Top 3', 'Bottom 3', 'Pages couleurs', 'Covers', 'Derniers classements']
+with open('2024.csv', 'w', newline='') as csvfile:
+    fieldnames = ['Manga', 'Moyenne', 'Écart type', 'Étendue', 'IQR', 'Occurrences', 'Absences', 'Premières places', 'Top 3', 'Bottom 3', 'Pages couleurs', 'Covers', 'Derniers classements']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
     writer.writeheader()
     for manga in mangas_ord:
         writer.writerow({'Manga': manga, 'Moyenne': moyennes[manga], 'Écart type': ecarts_types[manga],
-                            'Étendue': etendues[manga], 'IQR': iqrs[manga], 'Occurrences': nombre_occurrences[manga],
+                            'Étendue': etendues[manga], 'IQR': iqrs[manga], 'Occurrences': nombre_occurrences[manga], 'Absences': absences [manga],
                             'Premières places': premieres_places.get(manga, 0), 'Top 3': top3.get(manga, 0),
                             'Bottom 3': bottom3.get(manga, 0), 'Pages couleurs': pages_couleurs[manga], 'Covers': covers[manga], 'Derniers classements': derniers_classements[manga]})
         
@@ -170,5 +178,69 @@ for manga in mangas_ord:
     filename = f'{manga}_classements.png'
     plt.savefig(filename)
     plt.close()
+
+mangas_ord.reverse()
+rank = []
+for manga in mangas_ord:
+    if nombre_occurrences[manga] >= 8:
+        rank.append(manga)
+ranking_json = {"week": "24", 'ranking': [{'name': manga, 'chapter': nombre_occurrences[manga]} for manga in rank], 
+    "newbies": [],
+    "absent": [
+        {
+            "name": "Dear Anemone",
+            "chapter": 4
+        },
+        {
+            "name": "Super Psychic Policeman Chojo",
+            "chapter": 4
+        },
+    ],
+    "cover": {
+        "imgs": [
+            "https://static.wikia.nocookie.net/weeky-shonen-jump/images/d/d9/WSJ_Issue_2024_20_Cover.png"
+        ],
+        "rank": {
+            "name": "Astro Royale",
+            "chapter": 1
+        }
+    },
+    "color_pages": [
+        {
+            "imgs": [
+                "https://static.wikia.nocookie.net/weeky-shonen-jump/images/1/17/Astro_Royale_ch001p1_Issue_20_2024.png",
+                "https://static.wikia.nocookie.net/weeky-shonen-jump/images/d/dd/Astro_Royale_ch001_Issue_20_2024.png"
+            ],
+            "rank": {
+                "name": "Astro Royale",
+                "chapter": 1
+            }
+        },
+        {
+            "imgs": [
+                "https://static.wikia.nocookie.net/weeky-shonen-jump/images/d/d3/Undead_Unluck_ch203_Issue_20_2024.png"
+            ],
+            "rank": {
+                "name": "Undead Unluck",
+                "chapter": 203
+            }
+        },
+        {
+            "imgs": [
+                "https://static.wikia.nocookie.net/weeky-shonen-jump/images/b/bb/Nue%27s_Exorcist_ch046_Issue_20_2024.png"
+            ],
+            "rank": {
+                "name": "Nue's Exorcist",
+                "chapter": 46
+            }
+        }
+    ],
+    "preview_pages": [
+        "https://static.wikia.nocookie.net/weeky-shonen-jump/images/3/3b/WSJ_Issue_2024_21_Preview.png"
+    ]}
+
+# Enregistrer le JSON dans un fichier
+with open('ranking.json', 'w') as jsonfile:
+    json.dump(ranking_json, jsonfile, indent=4)
 # else:
 #     print(f"La requête a échoué avec le code de statut {response.status_code}")

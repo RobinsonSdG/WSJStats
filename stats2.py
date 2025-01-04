@@ -15,9 +15,9 @@ def get_rankings(year):
         print(f"La requête pour l'année {year} a échoué avec le code de statut {response.status_code}")
         return []
 
-# Récupérer les classements pour 2024
-rankings_2024 = get_rankings(2024)
-all_rankings = rankings_2024
+# Récupérer les classements pour 2025
+rankings_2025 = get_rankings(2025)
+all_rankings = rankings_2025
 
 # Obtenir la dernière semaine de classement
 derniere_semaine = all_rankings[-1] if all_rankings else None

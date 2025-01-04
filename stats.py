@@ -16,19 +16,19 @@ def get_rankings(year):
         print(f"La requête pour l'année {year} a échoué avec le code de statut {response.status_code}")
         return []
 
-# Récupérer les classements pour 2023 et 2024
+# Récupérer les classements pour 2023 et 2025
 # rankings_2023 = get_rankings(2023)
-rankings_2024 = get_rankings(2024)
+rankings_2025 = get_rankings(2025)
 
 # Fusionner les classements dans une seule liste triée par semaine
-# all_rankings = rankings_2023 + rankings_2024
+# all_rankings = rankings_2023 + rankings_2025
 # all_rankings = rankings_2023
-all_rankings = rankings_2024
+all_rankings = rankings_2025
 # print(all_rankings)
 # all_rankings.sort(key=lambda x: (int(x["year"]), int(x["week"])))
 
 
-# url = "http://localhost:8000/rankings/2024"
+# url = "http://localhost:8000/rankings/2025"
 
 # # Envoi de la requête GET
 # response = requests.get(url)
@@ -141,7 +141,7 @@ for bar1, bar2 in zip(bars1, bars2):
 plt.show()
 
 # Enregistrez les statistiques dans un fichier CSV
-with open('2024.csv', 'w', newline='') as csvfile:
+with open('2025.csv', 'w', newline='') as csvfile:
     fieldnames = ['Manga', 'Moyenne', 'Écart type', 'Étendue', 'IQR', 'Occurrences', 'Premières places', 'Top 3', 'Bottom 3', 'Pages couleurs', 'Covers', 'Derniers classements']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 

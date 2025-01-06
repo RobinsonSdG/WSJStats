@@ -184,6 +184,8 @@ rank = []
 for manga in mangas_ord:
     if nombre_occurrences[manga] >= 8:
         rank.append(manga)
+text_json = {'ranking': [{"Manga": manga, "Moyenne" : "%.2f" % moyennes[manga],"Mises en avant" : pages_couleurs[manga], "Top 1" : premieres_places.get(manga, 0),"Podiums" : top3.get(manga, 0),"Trios de fin" : bottom3.get(manga, 0),"Présences" : nombre_occurrences[manga],"Absences" : absences[manga]} for manga in rank]}
+# {"ranking": [{"Moyenne" : moyennes[manga],"Mises en avant" : 1"Top 1" : 0,"Podiums" : 0,"Trios de fin" : 16,"Présences" : 17,"Absences" : 0} for manga in rank]}
 ranking_json = {"week": "24", 'ranking': [{'name': manga, 'chapter': nombre_occurrences[manga]} for manga in rank], 
     "newbies": [],
     "absent": [
@@ -244,3 +246,5 @@ with open('ranking.json', 'w') as jsonfile:
     json.dump(ranking_json, jsonfile, indent=4)
 # else:
 #     print(f"La requête a échoué avec le code de statut {response.status_code}")
+with open('text.json', 'w') as jsonfile:
+    json.dump(text_json, jsonfile, indent=4)

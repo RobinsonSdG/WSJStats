@@ -184,6 +184,13 @@ rank = []
 for manga in mangas_ord:
     if nombre_occurrences[manga] >= 8:
         rank.append(manga)
+with open('recap_resume.txt', 'w') as fichier:
+        fichier.write("Classement :\n")
+        
+        total_mangas = len(rank)
+        for index, manga in enumerate(reversed(rank)):
+            position = total_mangas - index  # Calcul de la position inverse
+            fichier.write(f"{position} {manga}\n")
 text_json = {'ranking': [{"Manga": manga, "Moyenne" : "%.2f" % moyennes[manga],"Mises en avant" : pages_couleurs[manga], "Top 1" : premieres_places.get(manga, 0),"Podiums" : top3.get(manga, 0),"Trios de fin" : bottom3.get(manga, 0),"Présences" : nombre_occurrences[manga],"Absences" : absences[manga]} for manga in rank]}
 # {"ranking": [{"Moyenne" : moyennes[manga],"Mises en avant" : 1"Top 1" : 0,"Podiums" : 0,"Trios de fin" : 16,"Présences" : 17,"Absences" : 0} for manga in rank]}
 ranking_json = {"week": "24", 'ranking': [{'name': manga, 'chapter': nombre_occurrences[manga]} for manga in rank], 
